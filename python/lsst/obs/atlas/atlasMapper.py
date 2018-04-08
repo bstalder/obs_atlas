@@ -103,7 +103,7 @@ def assemble_raw(dataId, componentInfo, cls):
     for amp, ampExp in zip(ccd, ampExps):
         ampDict[amp.getName()] = ampExp
 
-    exposure = assembleTask.assembleCcd(ampDict)
+    exposure = assembleTask.assembleCcd(ampExps[0])
 
     md = componentInfo['raw_hdu'].obj
     exposure.setMetadata(md)

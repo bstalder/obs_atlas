@@ -80,7 +80,7 @@ CCD : &CCD
 # All the CCDs present in this file
 #
 CCDs :
-   S00: &S00                            # Sensor (0, 0)
+   '0': &S00                            # Sensor (0, 0)
       << : *CCD
       id : 0                            # Not quite sure what this is for
 #      serial : STA1600LN-SN19002       # ACAM1HKO
