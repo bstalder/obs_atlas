@@ -314,6 +314,10 @@ class AtlasMapper(CameraMapper):
 
         return afwImage.VisitInfo(md)
 
+    def bypass_ccdExposureId_bits(self, datasetType, pythonType, location, dataId):
+        # blatantly cargo culted from obs_test
+        return 41
+
     def bypass_ccdExposureId(self, datasetType, pythonType, location, dataId):
         return self._computeCcdExposureId(dataId)
 
