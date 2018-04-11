@@ -38,12 +38,6 @@ AMP_ITL : &AMP_ITL
 
     rawBBox                 : [[0,    0], [1350,    5300]]  # total size of one amp's raw data (10560 x 10560 imaging area)
 
-  # name of section     : [[start,start], [width, height]] # start is zero-based, length=length of arr
-    rawDataBBox             : [[0,    0], [1320,    5280]]  # data region in raw data
-    rawSerialPrescanBBox    : [[0,    0], [0,      5280]]  # serial prescan (often == extended)
-    rawSerialOverscanBBox   : [[1320,  0], [30,     5280]]  # serial overscan
-    rawParallelPrescanBBox  : [[0,    1], [0,         0]]  # pixels digitised before first parallel transfer
-    rawParallelOverscanBBox : [[0, 5280], [1320,      20]]  # parallel overscan
 
     saturation : 65535                  # saturation level, DN XXX Should this be in electrons?
 
@@ -52,10 +46,25 @@ AMP_ITL : &AMP_ITL
     linearityThreshold : 0
     linearityMax : 65535                # == saturation of ADC
     linearityCoeffs : [0, 65535]        # == [linearityThreshold, linearityMax]
+    perAmpData : False                     # data is provided independentally for each amplifier (a la LSST)?  **ATLAS fits files are flat.**
 
-AMP : &AMP
+AMPBOTTOM : &AMPBOTTOM
   << : *AMP_ITL
-  perAmpData : False                     # data is provided independentally for each amplifier (a la LSST)?  **ATLAS fits files are flat.**
+  # name of section     : [[start,start], [width, height]] # start is zero-based, length=length of arr
+  rawDataBBox             : [[0,    0], [1320,    5280]]  # data region in raw data
+  rawSerialPrescanBBox    : [[0,    0], [0,      0]]  # serial prescan (often == extended)
+  rawSerialOverscanBBox   : [[1320,  0], [30,     5280]]  # serial overscan
+  rawParallelPrescanBBox  : [[0,    0], [0,         0]]  # pixels digitised before first parallel transfer
+  rawParallelOverscanBBox : [[0, 5280], [1320,      20]]  # parallel overscan
+
+AMPTOP : &AMPTOP
+  << : *AMP_ITL
+  # name of section     : [[start,start], [width, height]] # start is zero-based, length=length of arr
+  rawDataBBox             : [[0,    20], [1320,    5280]]  # data region in raw data
+  rawSerialPrescanBBox    : [[0,    0], [0,      0]]  # serial prescan (often == extended)
+  rawSerialOverscanBBox   : [[1320,  0], [30,     5280]]  # serial overscan
+  rawParallelPrescanBBox  : [[0,    0], [0,         0]]  # pixels digitised before first parallel transfer
+  rawParallelOverscanBBox : [[0, 0], [1320,      20]]  # parallel overscan
 #
 # A single CCD ("sensor" to the camera team)
 #
@@ -90,7 +99,7 @@ CCDs :
 
       amplifiers:      # these take the form 00-07, 10-17, ie single digit row/col concatenated, not ints
            "10": &A10
-             <<: *AMP
+             <<: *AMPBOTTOM
              hdu : 1
              flipXY : [False, False]
              ixy : [0, 0]
@@ -139,7 +148,7 @@ CCDs :
              gain : 2.05
              readNoise : 5.688
            "07": &A07
-             <<: *AMP
+             <<: *AMPTOP
              hdu : 9
              flipXY : [False, False]
              ixy : [7, 1]
